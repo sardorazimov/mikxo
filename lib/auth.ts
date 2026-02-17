@@ -1,8 +1,15 @@
 import { SignJWT, jwtVerify } from "jose"
+import { cookies } from "next/headers";
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET!
 )
+export async function getSession() {
+  const sessionCookie = (await cookies()).get("session")?.value; // 'session' isminde sakladığını varsayıyorum
+  if (!sessionCookie) return null;
+
+  return await verifySession(sessionCookie);
+}
 
 export async function createSession(userId: string) {
 

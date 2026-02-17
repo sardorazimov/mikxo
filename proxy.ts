@@ -1,36 +1,45 @@
-import { NextRequest, NextResponse } from "next/server"
 
-export function middleware(req: NextRequest) {
+import { NextRequest, NextResponse } from "next/server";
+import { verifySession } from "@/lib/auth";
 
-  const token = req.cookies.get("session")?.value
+export async function proxy(req: NextRequest) {
 
-  const isAuth = !!token
+  const path = req.nextUrl.pathname;
 
-  const isAuthPage =
-    req.nextUrl.pathname.startsWith("/login") ||
-    req.nextUrl.pathname.startsWith("/register")
+  // ✅ API auth routes'i bypass et (ÇOK ÖNEMLİ)
+  if (
+    path.startsWith("/api/auth")
+  ) {
+    return NextResponse.next();
+  }
 
-  const isChatPage =
-    req.nextUrl.pathname.startsWith("/chat")
+  // dashboard protected
+  if (path.startsWith("/dashboard")) {
 
-  // not logged in → trying to access chat
-  if (!isAuth && isChatPage) {
+    const token =
+      req.cookies.get("session")?.value;
 
-    return NextResponse.redirect(
-      new URL("/login", req.url)
-    )
+    if (!token) {
+
+      return NextResponse.redirect(
+        new URL("/login", req.url)
+      );
+
+    }
+
+    const session =
+      await verifySession(token);
+
+    if (!session) {
+
+      return NextResponse.redirect(
+        new URL("/login", req.url)
+      );
+
+    }
 
   }
 
-  // logged in → trying to access login/register
-  if (isAuth && isAuthPage) {
-
-    return NextResponse.redirect(
-      new URL("/chat", req.url)
-    )
-
-  }
-
-  return NextResponse.next()
+  return NextResponse.next();
 
 }
