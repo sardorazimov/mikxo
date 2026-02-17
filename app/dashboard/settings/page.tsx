@@ -1,10 +1,17 @@
-import React from 'react'
-import SettingsPage from '../../../components/shared/setting-src'
 
-const page = () => {
+
+import { getCurrentUser }
+  from "@/lib/current-user";
+import SettingsLayout from "../../../components/settings/setting-layout";
+
+export default async function Page() {
+
+  const user =
+    await getCurrentUser();
+
   return (
-    <SettingsPage />
-  )
+    <SettingsLayout user={user} />
+  );
+
 }
 
-export default page

@@ -22,7 +22,7 @@ export const users = pgTable("users", {
   bio: text("bio"),
   isBot: boolean("is_bot").default(false).notNull(),
   googleId: text("google_id").unique(),
-
+ country: text("country"), 
   bannerUrl: text("banner_url"),
 
   birthDate: timestamp("birth_date"),

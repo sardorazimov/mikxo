@@ -75,7 +75,16 @@ export async function GET(req: Request) {
     });
 
     // redirect dashboard
-    return Response.redirect(new URL("/dashboard", req.url));
+    // Şunun yerine:
+    // return Response.redirect(new URL("/dashboard", req.url));
+
+    // Şunu dene (Daha güvenli):
+    return Response.redirect(
+      new URL(
+        "/dashboard",
+        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+      ),
+    );
   } catch (error) {
     console.error("GOOGLE CALLBACK ERROR:", error);
 

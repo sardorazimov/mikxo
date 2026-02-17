@@ -1,9 +1,9 @@
-import React from 'react'
+export default function Page() {
 
-const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      Recommended chats & groups
+    </div>
+  );
 
-export default page
+}
