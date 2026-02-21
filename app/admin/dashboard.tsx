@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   }, []);
 
   async function logout() {
-    document.cookie = "admin_session=; Max-Age=0; path=/";
+    await fetch("/api/admin/logout", { method: "POST" });
     window.location.reload();
   }
 

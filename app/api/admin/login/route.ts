@@ -11,6 +11,9 @@ export async function POST(req: Request) {
   (await cookies()).set("admin_session", "valid", {
     httpOnly: true,
     path: "/",
+    secure: true,
+    sameSite: "strict",
+    maxAge: 60 * 60 * 8, // 8 hours
   });
 
   return Response.json({ ok: true });

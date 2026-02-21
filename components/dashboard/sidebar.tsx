@@ -20,7 +20,7 @@ export default function Sidebar() {
           <Link key={href} href={href}>
             <div
               className={`p-3 flex flex-col items-center gap-1 text-xs ${
-                pathname.startsWith(href) && !pathname.startsWith("/dashboard/calls/")
+                pathname.startsWith(href)
                   ? "bg-neutral-700"
                   : "hover:bg-neutral-800"
               }`}

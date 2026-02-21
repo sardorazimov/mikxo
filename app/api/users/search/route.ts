@@ -9,6 +9,7 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
   const q = searchParams.get("q") ?? "";
+  const escaped = q.replace(/[%_\\]/g, "\\$&");
 
   const rows = await db
     .select({
@@ -18,7 +19,7 @@ export async function GET(req: Request) {
       avatarUrl: users.avatarUrl,
     })
     .from(users)
-    .where(ilike(users.username, `%${q}%`))
+    .where(ilike(users.username, `%${escaped}%`))
     .limit(20);
 
   return Response.json(rows);

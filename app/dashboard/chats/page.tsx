@@ -43,6 +43,7 @@ export default function ChatsPage() {
           >
             <div className="w-10 h-10 rounded-full bg-neutral-600 flex items-center justify-center text-lg overflow-hidden">
               {u.avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={u.avatarUrl} alt={u.username ?? ""} className="w-full h-full object-cover" />
               ) : (
                 "👤"
