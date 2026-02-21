@@ -3,74 +3,47 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar() {
+const navItems = [
+  { href: "/dashboard/chats", icon: "💬", label: "Chats" },
+  { href: "/dashboard/groups", icon: "👥", label: "Groups" },
+  { href: "/dashboard/channels", icon: "#", label: "Channels" },
+  { href: "/dashboard/calls", icon: "📞", label: "Calls" },
+];
 
+export default function Sidebar() {
   const pathname = usePathname();
 
-  const isChats =
-    pathname.startsWith("/dashboard/chats");
-
-  const isGroups =
-    pathname.startsWith("/dashboard/groups");
-
-  const isSettings =
-    pathname.startsWith("/dashboard/settings");
-
   return (
-
-    <div className="
-      w-20
-      bg-neutral-900
-      flex
-      flex-col
-      justify-between
-    ">
-
+    <div className="w-20 bg-neutral-900 flex flex-col justify-between">
       <div>
-
-        <Link href="/dashboard/chats">
-
-          <div className={`
-            p-3
-            ${isChats
-              ? "bg-neutral-700"
-              : "hover:bg-neutral-800"}
-          `}>
-            Chats
-          </div>
-
-        </Link>
-
-        <Link href="/dashboard/groups">
-
-          <div className={`
-            p-3
-            ${isGroups
-              ? "bg-neutral-700"
-              : "hover:bg-neutral-800"}
-          `}>
-            Groups
-          </div>
-
-        </Link>
-
+        {navItems.map(({ href, icon, label }) => (
+          <Link key={href} href={href}>
+            <div
+              className={`p-3 flex flex-col items-center gap-1 text-xs ${
+                pathname.startsWith(href) && !pathname.startsWith("/dashboard/calls/")
+                  ? "bg-neutral-700"
+                  : "hover:bg-neutral-800"
+              }`}
+            >
+              <span className="text-xl">{icon}</span>
+              <span>{label}</span>
+            </div>
+          </Link>
+        ))}
       </div>
 
       <Link href="/dashboard/settings">
-
-        <div className={`
-          p-3
-          ${isSettings
-            ? "bg-neutral-700"
-            : "hover:bg-neutral-800"}
-        `}>
-          Settings
+        <div
+          className={`p-3 flex flex-col items-center gap-1 text-xs ${
+            pathname.startsWith("/dashboard/settings")
+              ? "bg-neutral-700"
+              : "hover:bg-neutral-800"
+          }`}
+        >
+          <span className="text-xl">⚙️</span>
+          <span>Settings</span>
         </div>
-
       </Link>
-
     </div>
-
   );
-
 }

@@ -67,3 +67,42 @@ export const messages = pgTable("messages", {
   expiresAt: timestamp("expires_at"), // Kendi kendini silen mesajlar
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+// --- GRUPLAR ---
+export const groups = pgTable("groups", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
+  avatarUrl: text("avatar_url"),
+  isPrivate: boolean("is_private").default(false),
+  ownerId: uuid("owner_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// --- GRUP ÜYELERİ ---
+export const groupMembers = pgTable("group_members", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  groupId: uuid("group_id").references(() => groups.id),
+  userId: uuid("user_id").references(() => users.id),
+  role: varchar("role", { length: 20 }).default("member"),
+  joinedAt: timestamp("joined_at").defaultNow(),
+});
+
+// --- ARAMALAR ---
+export const calls = pgTable("calls", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  callerId: uuid("caller_id").references(() => users.id),
+  receiverId: uuid("receiver_id").references(() => users.id),
+  groupId: uuid("group_id").references(() => groups.id),
+  type: varchar("type", { length: 10 }), // 'audio' | 'video'
+  status: varchar("status", { length: 20 }), // 'calling' | 'active' | 'ended'
+  startedAt: timestamp("started_at").defaultNow(),
+  endedAt: timestamp("ended_at"),
+});
+
+// --- ADMİN TOKEN ---
+export const adminTokens = pgTable("admin_tokens", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  token: text("token").unique().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
