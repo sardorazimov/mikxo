@@ -4,6 +4,25 @@ import { getSession } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import { eq, and, ne } from "drizzle-orm";
 
+export async function GET() {
+  const session = await getSession();
+  if (!session?.userId) return NextResponse.json(null, { status: 401 });
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.userId),
+  });
+
+  if (!user) return NextResponse.json(null, { status: 404 });
+
+  return NextResponse.json({
+    id: user.id,
+    username: user.username,
+    displayName: user.displayName,
+    avatarUrl: user.avatarUrl,
+    bio: user.bio,
+  });
+}
+
 export async function POST(req: Request) {
   try {
     const session = await getSession();
