@@ -4,7 +4,7 @@ export async function POST() {
   (await cookies()).set("admin_session", "", {
     httpOnly: true,
     path: "/",
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 0,
   });
